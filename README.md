@@ -3,6 +3,10 @@
 
 A skill-based movement game, inspired by Counter Strike Bhop/Surf community servers.
 
+> [!NOTE]  
+> This project is not maintained/updated currently but
+> I might get back to do a major rework at some point when other building blocks in the ecosystem are ready.
+
 ![bevy_hop_screen](screen.png)
 
 Uses [`bevy_fps_controller`][9] for Source Engine inspired movement with [`Air Strafing/Bunny Hopping`][8]
