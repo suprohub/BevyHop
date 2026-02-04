@@ -1,0 +1,3 @@
+# Needed for .cargo/config.toml
+[toolchain]
+channel = "nightly"

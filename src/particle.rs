@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_hanabi::*;
+use bevy_hanabi::{Gradient, prelude::*};
 
 use crate::{color::Resurrect64, core::*};
 

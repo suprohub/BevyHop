@@ -36,10 +36,10 @@ pub struct Sounds {
     pub land_sound: Handle<AudioSource>,
 }
 
-#[derive(Event)]
+#[derive(Message)]
 pub struct SpawnLevel(pub NonZeroUsize);
 
-#[derive(Event)]
+#[derive(Message)]
 pub struct Respawn<S: Component> {
     pub translation: Vec3,
     _marker: PhantomData<S>,
@@ -109,11 +109,11 @@ pub struct History(pub Vec<Entity>);
 
 impl History {
     pub fn last(&self, q_gtf: Query<&GlobalTransform, With<CheckPoint>>) -> Vec3 {
-        if let Some(check_point) = self.0.last() {
-            if let Ok(gtf) = q_gtf.get(*check_point) {
-                let t = gtf.translation();
-                return t.with_z(t.z + 4.);
-            }
+        if let Some(check_point) = self.0.last()
+            && let Ok(gtf) = q_gtf.get(*check_point)
+        {
+            let t = gtf.translation();
+            return t.with_z(t.z + 4.);
         };
 
         SPAWN_POINT
@@ -153,7 +153,7 @@ pub struct CorePlugin;
 
 impl Plugin for CorePlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<SpawnLevel>()
+        app.add_message::<SpawnLevel>()
             .insert_resource(AssetsLoading::default())
             .insert_resource(Time::<Fixed>::from_hz(128.0))
             .insert_resource(History::default())
@@ -187,7 +187,7 @@ impl Plugin for CorePlugin {
                     }),
                 SkeinPlugin::default(),
                 PhysicsPlugins::default(),
-                PhysicsDebugPlugin::default(),
+                PhysicsDebugPlugin,
                 UnitPlugin::<Prop>::default(),
                 UnitPlugin::<LogicalPlayer>::default(),
             ));
@@ -208,7 +208,7 @@ impl<S: Component> Default for UnitPlugin<S> {
 
 impl<S: Component> Plugin for UnitPlugin<S> {
     fn build(&self, app: &mut App) {
-        app.add_event::<Respawn<S>>()
+        app.add_message::<Respawn<S>>()
             .add_systems(FixedUpdate, out_of_bounds::<S>.in_set(GameplaySet))
             .add_systems(PreUpdate, respawn::<S>.in_set(GameplaySet));
     }
@@ -236,7 +236,7 @@ pub fn cleanup<S: Component>(mut cmd: Commands, q: Query<Entity, With<S>>) {
 
 pub fn respawn<S: Component>(
     mut q: Query<(&mut Transform, &mut LinearVelocity), With<S>>,
-    mut er: EventReader<Respawn<S>>,
+    mut er: MessageReader<Respawn<S>>,
 ) {
     for e in er.read() {
         for (mut transform, mut velocity) in &mut q {
@@ -250,7 +250,7 @@ pub fn out_of_bounds<S: Component>(
     q: Query<&Transform, With<S>>,
     history: Res<History>,
     q_gtf: Query<&GlobalTransform, With<CheckPoint>>,
-    mut er: EventWriter<Respawn<S>>,
+    mut er: MessageWriter<Respawn<S>>,
 ) {
     let spawn_point = history.last(q_gtf);
 

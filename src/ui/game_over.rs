@@ -67,7 +67,7 @@ fn actions(cmd: &mut RelatedSpawnerCommands<'_, ChildOf>, text_resource: &Res<Te
                 )],
             ))
             .observe(
-                |_: Trigger<Pointer<Click>>, mut ns: ResMut<NextState<AppState>>| {
+                |_: On<Pointer<Click>>, mut ns: ResMut<NextState<AppState>>| {
                     ns.set(AppState::MainMenu);
                 },
             );
@@ -78,7 +78,7 @@ fn actions(cmd: &mut RelatedSpawnerCommands<'_, ChildOf>, text_resource: &Res<Te
         NodeBuilder::new().get_button(),
         children![(Text::new("Quit"), text_resource.get_button_text_props())],
     ))
-    .observe(|_: Trigger<Pointer<Click>>, mut ew: EventWriter<AppExit>| {
+    .observe(|_: On<Pointer<Click>>, mut ew: MessageWriter<AppExit>| {
         ew.write(AppExit::Success);
     });
 }
@@ -128,6 +128,6 @@ fn content(
     });
 }
 
-fn handle_restart(_: Trigger<Pointer<Click>>, mut ns_app_state: ResMut<NextState<AppState>>) {
+fn handle_restart(_: On<Pointer<Click>>, mut ns_app_state: ResMut<NextState<AppState>>) {
     ns_app_state.set(AppState::InGame);
 }

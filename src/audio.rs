@@ -60,7 +60,7 @@ fn ocean_sound(mut cmd: Commands, sounds: Res<Sounds>) {
 fn dive_sound(
     mut cmd: Commands,
     q: Query<&Transform, With<LogicalPlayer>>,
-    mut er: EventReader<Respawn<LogicalPlayer>>,
+    mut er: MessageReader<Respawn<LogicalPlayer>>,
     sounds: Res<Sounds>,
 ) {
     for e in er.read() {
@@ -81,7 +81,7 @@ fn dive_sound(
     }
 }
 
-fn shatter_sound(mut cmd: Commands, sounds: Res<Sounds>, mut er: EventReader<SpawnLevel>) {
+fn shatter_sound(mut cmd: Commands, sounds: Res<Sounds>, mut er: MessageReader<SpawnLevel>) {
     for _ in er.read() {
         cmd.spawn((
             AudioPlayer::new(sounds.shatter_sound.clone()),

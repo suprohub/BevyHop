@@ -3,10 +3,12 @@ use std::f32::consts::TAU;
 use avian_pickup::actor::*;
 use avian3d::prelude::*;
 use bevy::{
-    core_pipeline::{bloom::Bloom, tonemapping::Tonemapping},
-    pbr::{NotShadowCaster, NotShadowReceiver, VolumetricFog},
+    camera::Exposure,
+    core_pipeline::tonemapping::Tonemapping,
+    light::{NotShadowCaster, NotShadowReceiver, VolumetricFog},
+    post_process::bloom::Bloom,
     prelude::*,
-    render::{camera::Exposure, view::ColorGrading},
+    render::view::{ColorGrading, Hdr},
 };
 use bevy_fps_controller::controller::*;
 
@@ -56,7 +58,9 @@ fn setup(mut cmd: Commands) {
                         CollisionLayer::End,
                     ],
                 ),
-                Sleeping,
+                // TODO: Figure out why original dev placed sleeping here\
+                // (player freezes)
+                //Sleeping,
                 LockedAxes::ROTATION_LOCKED,
                 Mass(1.0),
                 GravityScale(0.0),
@@ -93,10 +97,16 @@ fn setup(mut cmd: Commands) {
 
     cmd.spawn((
         Camera {
-            hdr: true,
+            // hdr: true,
             ..default()
         },
         Camera3d::default(),
+        Hdr,
+        AmbientLight {
+            color: Color::WHITE,
+            brightness: 10000.0,
+            affects_lightmapped_meshes: true,
+        },
         ColorGrading::default(),
         Bloom::NATURAL,
         Tonemapping::TonyMcMapface,

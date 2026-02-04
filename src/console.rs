@@ -42,7 +42,7 @@ struct LevelCommand {
     level: usize,
 }
 
-fn level(mut log: ConsoleCommand<LevelCommand>, mut ew: EventWriter<SpawnLevel>) {
+fn level(mut log: ConsoleCommand<LevelCommand>, mut ew: MessageWriter<SpawnLevel>) {
     if let Some(Ok(LevelCommand { level })) = log.take() {
         reply!(log, "Loading Level {level}");
 

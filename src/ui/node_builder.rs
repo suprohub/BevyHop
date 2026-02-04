@@ -45,6 +45,7 @@ impl From<&NodeBuilder> for Node {
             row_gap: MARGIN / 2.,
             column_gap: MARGIN / 2.,
             border: value.border,
+            border_radius: BorderRadius::all(BORDER_RADIUS),
             ..default()
         }
     }
@@ -114,7 +115,6 @@ impl NodeBuilder {
                 margin
             })
             .get(),
-            BorderRadius::all(BORDER_RADIUS),
         )
     }
 
@@ -145,9 +145,8 @@ impl NodeBuilder {
 
     pub fn get_card_props() -> impl Bundle {
         (
-            BorderRadius::all(BORDER_RADIUS),
             BackgroundColor(NORMAL_BUTTON.with_alpha(0.7)),
-            BorderColor(NORMAL_BUTTON.with_alpha(0.9)),
+            BorderColor::all(NORMAL_BUTTON.with_alpha(0.9)),
         )
     }
 }

@@ -40,9 +40,7 @@ impl Plugin for UiPlugin {
                         ..default()
                     },
                 },
-                EguiPlugin {
-                    enable_multipass_for_primary_context: false,
-                },
+                EguiPlugin::default(),
                 WorldInspectorPlugin::default().run_if(in_state(DebugState::Enabled)),
                 bevy_console::ConsolePlugin,
             ))

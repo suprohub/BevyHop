@@ -36,10 +36,10 @@ pub fn reset_run_duration(mut run_duration: ResMut<RunDuration>, mut timer: ResM
 }
 
 fn reset_timer(
-    mut er_respawn: EventReader<Respawn<LogicalPlayer>>,
+    mut er_respawn: MessageReader<Respawn<LogicalPlayer>>,
     mut timer: ResMut<LevelDuration>,
     history: Res<History>,
-    mut er_level: EventReader<SpawnLevel>,
+    mut er_level: MessageReader<SpawnLevel>,
 ) {
     for _ in er_level.read() {
         timer.0.reset();

@@ -4,12 +4,12 @@ version = "1.0.2"
 edition = "2024"
 
 [dependencies]
-bevy = { version = "0.16", features = ["exr","mp3"] }
-bevy_skein = "0.2.0"
-bevy_fps_controller = { git = "https://github.com/NicoZweifel/bevy_fps_controller.git", features=['avian'], branch ="avian/bevy_0.16" }
-avian3d = "0.3.0"
-avian_pickup = "0.2.0"
-bevy_hanabi = {version ="0.16.0", default-features = false, features =["3d"]}
+bevy = { version = "0.18", features = ["exr", "mp3"] }
+bevy_skein = "0.5"
+bevy_fps_controller = { git = "https://github.com/qhdwight/bevy_fps_controller.git", features = ["avian"], branch = "development" }
+avian3d = "0.5"
+avian_pickup = "0.4"
+bevy_hanabi = { version = "0.18", default-features = false, features = ["3d"] }
 
 # Set max log levels. This helps avoid unwanted low-severity log spam, which can affect performance.
 log = { version = "0.4", features = [
@@ -20,11 +20,11 @@ tracing = { version = "0.1", features = [
     "max_level_debug",
     "release_max_level_warn",
 ] }
-bevy_console = "0.14.0"
-bevy_water = {version = "0.16.0", default-features = false, features = ["webgpu","embed_shaders","depth_prepass"]}
-bevy-inspector-egui = "0.31.0"
-bevy_egui = "0.34.1"
-bevy_dev_tools = "0.16.1"
+bevy_console = "0.17"
+bevy_water = { version = "0.18", default-features = false, features = ["webgpu","embed_shaders","depth_prepass"] }
+bevy-inspector-egui = "0.36"
+bevy_egui = "0.39"
+bevy_dev_tools = "0.18"
 
 
 # Idiomatic Bevy code often triggers these lints, and the CI workflow treats them as errors.

@@ -58,11 +58,11 @@ fn content(cmd: &mut RelatedSpawnerCommands<'_, ChildOf>, text_resource: &Res<Te
         NodeBuilder::new().get_button(),
         children![(Text::new("Quit"), text_resource.get_button_text_props(),)],
     ))
-    .observe(|_: Trigger<Pointer<Click>>, mut ew: EventWriter<AppExit>| {
+    .observe(|_: On<Pointer<Click>>, mut ew: MessageWriter<AppExit>| {
         ew.write(AppExit::Success);
     });
 }
 
-fn handle_play(_: Trigger<Pointer<Click>>, mut ns: ResMut<NextState<AppState>>) {
+fn handle_play(_: On<Pointer<Click>>, mut ns: ResMut<NextState<AppState>>) {
     ns.set(AppState::InGame);
 }

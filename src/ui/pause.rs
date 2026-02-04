@@ -70,7 +70,7 @@ fn pause_menu_content(
         )],
     ))
     .observe(
-        |_: Trigger<Pointer<Click>>, mut ns_app_state: ResMut<NextState<AppState>>| {
+        |_: On<Pointer<Click>>, mut ns_app_state: ResMut<NextState<AppState>>| {
             ns_app_state.set(AppState::MainMenu);
         },
     );
@@ -80,11 +80,11 @@ fn pause_menu_content(
         NodeBuilder::new().get_button(),
         children![(Text::new("Quit"), text_resource.get_button_text_props())],
     ))
-    .observe(|_: Trigger<Pointer<Click>>, mut ew: EventWriter<AppExit>| {
+    .observe(|_: On<Pointer<Click>>, mut ew: MessageWriter<AppExit>| {
         ew.write(AppExit::Success);
     });
 }
 
-fn handle_resume(_: Trigger<Pointer<Click>>, mut ns: ResMut<NextState<PausedState>>) {
+fn handle_resume(_: On<Pointer<Click>>, mut ns: ResMut<NextState<PausedState>>) {
     ns.set(PausedState::Running);
 }

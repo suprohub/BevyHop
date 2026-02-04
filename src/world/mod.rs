@@ -24,8 +24,8 @@ impl Plugin for WorldPlugin {
                 height: WATER_HEIGHT,
                 ..default()
             })
-            .add_plugins((WaterPlugin, ColliderPlugin))
-            .add_event::<SpawnLevel>()
+            .add_plugins((WaterPlugin, ColliderPlugin));
+        app.add_message::<SpawnLevel>()
             .add_systems(Startup, setup)
             .add_systems(
                 FixedUpdate,
@@ -49,22 +49,17 @@ impl Plugin for WorldPlugin {
             )
             .add_systems(Update, rotate_speed_boost.in_set(GameplaySet))
             .add_observer(
-                |trigger: Trigger<SceneInstanceReady>,
+                |trigger: On<SceneInstanceReady>,
                  children: Query<&Children>,
                  characters: Query<&Character>| {
-                    for entity in children.iter_descendants(trigger.target()) {
+                    for entity in children.iter_descendants(trigger.entity) {
                         let Ok(character) = characters.get(entity) else {
                             continue;
                         };
                         info!(?character);
                     }
                 },
-            )
-            .insert_resource(AmbientLight {
-                color: Color::WHITE,
-                brightness: 10000.0,
-                affects_lightmapped_meshes: true,
-            });
+            );
     }
 }
 
@@ -201,7 +196,7 @@ fn spawn_level(
     scene: Single<Entity, With<SceneRoot>>,
     mut current_level: ResMut<CurrentLevel>,
     mut main_scene: ResMut<MainScene>,
-    mut er: EventReader<SpawnLevel>,
+    mut er: MessageReader<SpawnLevel>,
     mut q_player: Query<&mut Transform, With<LogicalPlayer>>,
 
     mut timer: ResMut<LevelDuration>,

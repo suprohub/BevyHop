@@ -89,16 +89,16 @@ fn checkpoint_colliders(
 }
 
 fn checkpoint_collision(
-    trigger: Trigger<OnCollisionStart>,
+    trigger: On<CollisionStart>,
     mut cmd: Commands,
     mut history: ResMut<History>,
     current_lvl: Res<CurrentLevel>,
     fx: Res<ParticleEffects>,
     sounds: Res<Sounds>,
 ) {
-    history.0.push(trigger.target());
+    history.0.push(trigger.collider1);
 
-    let other_entity = trigger.collider;
+    let other_entity = trigger.collider2;
 
     cmd.entity(other_entity).with_child((
         ParticleEffect::new(fx.get_checkpoint_fx(current_lvl.get())),
@@ -140,10 +140,10 @@ fn end_colliders(
 }
 
 fn end_collision(
-    _: Trigger<OnCollisionStart>,
+    _: On<CollisionStart>,
     current_lvl: Res<CurrentLevel>,
     mut ns: ResMut<NextState<AppState>>,
-    mut ew: EventWriter<SpawnLevel>,
+    mut ew: MessageWriter<SpawnLevel>,
     level_duration: Res<LevelDuration>,
     mut run_duration: ResMut<RunDuration>,
 ) {
@@ -199,16 +199,16 @@ fn boost_colliders(
 }
 
 fn boost_collision(
-    trigger: Trigger<OnCollisionEnd>,
+    trigger: On<CollisionEnd>,
     mut cmd: Commands,
     q_gtf: Query<&GlobalTransform>,
     fx: Res<ParticleEffects>,
     mut q_boosted: Query<&mut LinearVelocity>,
     sounds: Res<Sounds>,
 ) {
-    let boost = trigger.target();
+    let boost = trigger.collider1;
 
-    let other_entity = trigger.collider;
+    let other_entity = trigger.collider2;
 
     let Ok(mut boosted) = q_boosted.get_mut(other_entity) else {
         return;
