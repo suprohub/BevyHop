@@ -264,5 +264,5 @@ pub fn out_of_bounds<S: Component>(
 }
 
 pub fn is_out_of_bounds(translation: Vec3, spawn_point: Vec3) -> bool {
-    (spawn_point.y - translation.y).abs() >= 95.
+    spawn_point.y - translation.y >= 10.
 }

@@ -15,15 +15,10 @@ use crate::prelude::*;
 
 pub struct WorldPlugin;
 
-const WATER_HEIGHT: f32 = 10.0;
-
 impl Plugin for WorldPlugin {
     fn build(&self, app: &mut App) {
         app.register_type::<Sun>()
-            .insert_resource(WaterSettings {
-                height: WATER_HEIGHT,
-                ..default()
-            })
+            .insert_resource(WaterSettings::default())
             .add_plugins((WaterPlugin, ColliderPlugin));
         app.add_message::<SpawnLevel>()
             .add_systems(Startup, setup)
@@ -120,7 +115,7 @@ fn reset_world(mut world: ResMut<MainScene>, mut current_level: ResMut<CurrentLe
 
 fn setup_water(mut q_water: Query<&mut Transform, (With<WaterTiles>, Without<Ready>)>) {
     for mut water in &mut q_water {
-        water.scale = Vec3::splat(8.);
+        //water.scale = Vec3::splat(2.);
     }
 }
 
@@ -131,7 +126,7 @@ fn translate_water(
 ) {
     let spawn_point = history.last(q_gtf);
     for mut water in &mut q_water {
-        water.translation.y = spawn_point.y - 170.;
+        water.translation.y = spawn_point.y - 10.;
     }
 }
 
